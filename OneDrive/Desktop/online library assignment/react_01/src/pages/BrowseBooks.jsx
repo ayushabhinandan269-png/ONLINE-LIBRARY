@@ -11,7 +11,7 @@ const getCoverImage = (coverId) =>
 
 export default function BrowseBooks() {
   const dispatch = useDispatch();
-  const { category } = useParams(); // ✅ dynamic category route
+  const { category } = useParams(); // dynamic category
   const { books, status, error } = useSelector((state) => state.books);
 
   const [search, setSearch] = useState("");
@@ -80,12 +80,28 @@ export default function BrowseBooks() {
         </div>
 
         {/* CATEGORY LINKS */}
-        <div className="flex justify-center gap-6 flex-wrap text-blue-600 font-medium">
-          <Link to="/books">All</Link>
-          <Link to="/books/Fiction">Fiction</Link>
-          <Link to="/books/Non-Fiction">Non-Fiction</Link>
-          <Link to="/books/Sci-Fi">Sci-Fi</Link>
-          <Link to="/books/Fantasy">Fantasy</Link>
+        <div className="flex justify-center gap-6 flex-wrap font-medium">
+          {[
+            "All",
+            "Fiction",
+            "Non-Fiction",
+            "Sci-Fi",
+            "Biography",
+            "Technology",
+          ].map((cat) => (
+            <Link
+              key={cat}
+              to={cat === "All" ? "/books" : `/books/${cat}`}
+              className={`px-4 py-2 rounded-full border transition ${
+                category === cat ||
+                (!category && cat === "All")
+                  ? "bg-blue-600 text-white"
+                  : "text-blue-600 border-blue-600 hover:bg-blue-50"
+              }`}
+            >
+              {cat}
+            </Link>
+          ))}
         </div>
 
         {/* BOOK GRID */}
