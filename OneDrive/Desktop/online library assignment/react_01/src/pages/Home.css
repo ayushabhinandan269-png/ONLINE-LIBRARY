@@ -1,0 +1,146 @@
+.home {
+  min-height: 100vh;
+  background-color: #f4f6f8;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  padding-top: 60px;
+  padding-bottom: 40px;
+  box-sizing: border-box;
+}
+
+.home-content {
+  max-width: 1000px;
+  width: 100%;
+  text-align: center;
+  padding: 40px;
+}
+
+/* HERO */
+.home-content h1 {
+  font-size: 48px;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+.home-content p {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 40px;
+}
+
+/* BUTTONS */
+.home-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  margin-bottom: 60px;
+  flex-wrap: wrap;
+}
+
+.primary-btn,
+.secondary-btn {
+  padding: 14px 32px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.primary-btn {
+  background: #007bff;
+  color: white;
+}
+
+.secondary-btn {
+  border: 2px solid #007bff;
+  color: #007bff;
+}
+
+/* CATEGORIES */
+.categories {
+  margin-bottom: 60px;
+}
+
+.categories h2 {
+  margin-bottom: 20px;
+}
+
+.category-list {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.category-list span {
+  background: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* POPULAR BOOKS */
+.popular-books {
+  margin-bottom: 70px;
+}
+
+.popular-books h2 {
+  margin-bottom: 25px;
+}
+
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+.book-card {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.book-card h3 {
+  margin-bottom: 8px;
+}
+
+.book-card p {
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.book-card a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* FEATURES */
+.features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 35px;
+}
+
+.feature-card {
+  background: white;
+  padding: 28px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .features,
+  .book-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-content h1 {
+    font-size: 36px;
+  }
+}
+
