@@ -7,7 +7,7 @@ const getCoverImage = (coverId) =>
     ? `https://covers.openlibrary.org/b/id/${coverId}-L.jpg`
     : "https://via.placeholder.com/200x300?text=No+Image";
 
-/* 🔹 Popular Books fallback (for Home page cards) */
+/* 🔹 Popular Books fallback (Home page cards) */
 const popularBooks = [
   {
     id: "1",
@@ -44,60 +44,74 @@ export default function BookDetails() {
   // ✅ Redux books (API + added books)
   const reduxBooks = useSelector((state) => state.books.books);
 
-  // 🔎 Try Redux first
-  let book = reduxBooks.find((b) => String(b.id) === id);
+  // 🔎 Find book in Redux first
+  let book = reduxBooks.find((b) => String(b.id) === String(id));
 
   // 🔁 Fallback to popular books
   if (!book) {
-    book = popularBooks.find((b) => b.id === id);
+    book = popularBooks.find((b) => String(b.id) === String(id));
   }
 
+  
   if (!book) {
     return (
-      <div className="text-center mt-20 text-xl">
+      <div className="text-center mt-24 text-xl text-gray-600">
         Book not found
       </div>
     );
   }
 
   return (
-    <div className="p-8 max-w-4xl mx-auto flex flex-col md:flex-row gap-8">
-      
-      {/* 📘 Book Image */}
-      <img
-        src={getCoverImage(book.coverId)}
-        alt={book.title}
-        className="w-64 h-96 object-cover rounded shadow"
-      />
+    <div className="min-h-screen bg-gray-100 py-16">
+      <div className="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-md flex flex-col md:flex-row gap-8">
+        
+        {/* 📘 Book Image */}
+        <img
+          src={getCoverImage(book.coverId)}
+          alt={book.title}
+          className="w-64 h-96 object-cover rounded shadow"
+        />
 
-      {/* 📄 Book Info */}
-      <div>
-        <h1 className="text-3xl font-bold mb-2">
-          {book.title}
-        </h1>
+        {/* 📄 Book Info */}
+        <div className="flex-1">
+          <h1 className="text-3xl font-bold mb-3">
+            {book.title}
+          </h1>
 
-        <p className="text-gray-700 mb-1">
-          <strong>Author:</strong> {book.author}
-        </p>
+          <p className="text-gray-700 mb-1">
+            <strong>Author:</strong> {book.author}
+          </p>
 
-        <p className="text-gray-700 mb-1">
-          <strong>Category:</strong> {book.category}
-        </p>
+          <p className="text-gray-700 mb-1">
+            <strong>Category:</strong> {book.category}
+          </p>
 
-        <p className="text-gray-700 mb-1">
-          <strong>Rating:</strong> {book.rating} ⭐
-        </p>
+          <p className="text-gray-700 mb-3">
+            <strong>Rating:</strong> {book.rating} ⭐
+          </p>
 
-        <p className="mt-4 text-gray-800">
-          {book.description}
-        </p>
+          <p className="text-gray-800 leading-relaxed">
+            {book.description}
+          </p>
 
-        <Link
-          to="/books"
-          className="inline-block mt-6 text-blue-600 hover:underline"
-        >
-          ← Back to Browse
-        </Link>
+          {/* Navigation */}
+          <div className="mt-6 flex gap-6">
+            <Link
+              to="/books"
+              className="text-blue-600 hover:underline"
+            >
+              ← Back to Browse
+            </Link>
+
+            <Link
+              to={`/books/${book.category}`}
+              className="text-blue-600 hover:underline"
+            >
+              View more {book.category} books →
+            </Link>
+          </div>
+        </div>
+
       </div>
     </div>
   );
