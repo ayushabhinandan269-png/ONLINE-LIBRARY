@@ -2,24 +2,35 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 /* ===============================
-   API CALL 
+   API CALL
 ================================ */
 export const fetchBooks = createAsyncThunk(
   "books/fetchBooks",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        "https://openlibrary.org/search.json?q=programming"
+        "https://openlibrary.org/search.json?q=book"
       );
 
-      return response.data.docs.slice(0, 12).map((book, index) => ({
-        id: book.key || index,
+      // 👉 helper to assign categories deterministically
+      const categories = [
+        "Fiction",
+        "Non-Fiction",
+        "Sci-Fi",
+        "Biography",
+        "Technology"
+      ];
+
+      return response.data.docs.slice(0, 20).map((book, index) => ({
+        id: book.key?.replace("/works/", "") || String(index),
         title: book.title,
         author: book.author_name?.[0] || "Unknown",
-        category: "Programming",
-        description: "Fetched from Open Library API",
-        rating: 4,
-        coverId: book.cover_i || null   
+        category: categories[index % categories.length], // ✅ IMPORTANT
+        description:
+          book.first_sentence?.[0] ||
+          "No description available for this book.",
+        rating: Math.floor(Math.random() * 2) + 4, // 4 or 5 ⭐
+        coverId: book.cover_i || null
       }));
     } catch (error) {
       return rejectWithValue("Failed to fetch books");
@@ -34,26 +45,27 @@ const booksSlice = createSlice({
   name: "books",
   initialState: {
     books: [],
-    status: "idle",      // idle | loading | succeeded | failed
+    status: "idle", // idle | loading | succeeded | failed
     error: null
   },
   reducers: {
     addBook: (state, action) => {
-      state.books.unshift(action.payload); // NEW BOOK FIRST
+      state.books.unshift(action.payload);
     }
   },
   extraReducers: (builder) => {
     builder
-      // loading
       .addCase(fetchBooks.pending, (state) => {
         state.status = "loading";
       })
-      //  success
       .addCase(fetchBooks.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.books.push(...action.payload);
+
+        // ❗ avoid duplicate fetch on navigation
+        if (state.books.length === 0) {
+          state.books = action.payload;
+        }
       })
-      //  error
       .addCase(fetchBooks.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
